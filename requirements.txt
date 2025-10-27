@@ -1,0 +1,6 @@
+fastapi
+uvicorn[standard]
+sqlalchemy
+python-multipart
+google-api-python-client
+python-dotenv

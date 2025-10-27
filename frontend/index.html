@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Вход - YouTube Boost</title>
+    <!-- 1. Подключаем Pico.css -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@picocss/pico@1/css/pico.min.css">
+</head>
+<body>
+    <!-- 2. Оборачиваем контент в <main> -->
+    <main class="container">
+       <hgroup>
+    <h1>YouTube Boost</h1>
+    <h2>Раскройте потенциал вашего канала с помощью ИИ.</h2>
+</hgroup>
+        
+        <!-- Используем сетку Pico для двух колонок -->
+        <div class="grid">
+            <article>
+                <h3 align="center">Вход</h3>
+                <form id="login-form">
+                    <input type="email" id="login-email" placeholder="Email" required>
+                    <input type="password" id="login-password" placeholder="Пароль" required>
+                    <button type="submit">Войти</button>
+                </form>
+            </article>
+            <article>
+                <h3 align="center">Регистрация</h3>
+                <form id="register-form">
+                    <input type="email" id="register-email" placeholder="Email" required>
+                    <input type="password" id="register-password" placeholder="Пароль" required>
+                    <button type="submit" class="secondary">Зарегистрироваться</button>
+                </form>
+            </article>
+        </div>
+        <p id="error-message" style="color: var(--pico-color-red-500 );"></p>
+    </main>
+    <script src="app.js"></script>
+</body>
+</html>
