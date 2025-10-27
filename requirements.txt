@@ -4,3 +4,6 @@ sqlalchemy
 python-multipart
 google-api-python-client
 python-dotenv
+email-validator
+
+
