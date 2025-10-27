@@ -1,7 +1,9 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from . import models, database, auth
-from .services import youtube_analyzer
+import models
+import database
+import auth
+from services import youtube_analyzer
 
 # Создание базы данных (если не существует)
 models.Base.metadata.create_all(bind=database.engine)
