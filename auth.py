@@ -1,7 +1,8 @@
 from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy.orm import Session
-from . import schemas, models, database
-from .database import get_db
+import schemas
+import models
+import database
 
 router = APIRouter(
     prefix="/api/v1/users",
@@ -17,7 +18,7 @@ def get_db_session():
         db.close()
 
 @router.post("/register", response_model=schemas.User)
-def register_user(user: schemas.UserCreate, db: Session = Depends(get_db)):
+def register_user(user: schemas.UserCreate, db: Session = Depends(get_db_session)):
     db_user = db.query(models.User).filter(models.User.email == user.email).first()
     if db_user:
         raise HTTPException(status_code=400, detail="Email already registered")
@@ -31,7 +32,7 @@ def register_user(user: schemas.UserCreate, db: Session = Depends(get_db)):
     return new_user
 
 @router.post("/login")
-def login_user(user: schemas.UserCreate, db: Session = Depends(get_db)):
+def login_user(user: schemas.UserCreate, db: Session = Depends(get_db_session)):
     db_user = db.query(models.User).filter(models.User.email == user.email).first()
     
     # 1. Проверка существования пользователя
