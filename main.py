@@ -17,11 +17,9 @@ app = FastAPI(
 origins = [
     "http://localhost",
     "http://localhost:8000",
-    "http://localhost:8001",
     "http://127.0.0.1:8000",
-    "http://127.0.0.1:8001",
-    "http://0.0.0.0:8000",
-    "http://0.0.0.0:8001",
+    "https://youtube-boost-fastapi-06e21a623f18.herokuapp.com", # Ваш Heroku URL
+    "*" # Разрешаем все источники для локального тестирования
 ]
 
 app.add_middleware(
@@ -30,7 +28,7 @@ app.add_middleware(
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
-)
+ )
 
 # Включение роутеров
 app.include_router(auth.router)
