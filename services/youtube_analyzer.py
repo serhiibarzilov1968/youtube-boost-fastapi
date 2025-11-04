@@ -81,3 +81,4 @@ def analyze_channel(channel_id: str):
     except Exception as e:
         print(f"YouTube API Error: {e}")
         raise HTTPException(status_code=500, detail=f"Failed to analyze channel: {e}")
+
