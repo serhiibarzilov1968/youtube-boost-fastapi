@@ -12,3 +12,4 @@ class User(database.Base):
     # Дополнительные поля для канала (пока не используются)
     channel_id = Column(String, nullable=True)
     channel_name = Column(String, nullable=True)
+

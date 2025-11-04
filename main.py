@@ -17,8 +17,11 @@ app = FastAPI(
 origins = [
     "http://localhost",
     "http://localhost:8000",
+    "http://localhost:8001",
     "http://127.0.0.1:8000",
+    "http://127.0.0.1:8001",
     "http://0.0.0.0:8000",
+    "http://0.0.0.0:8001",
 ]
 
 app.add_middleware(
@@ -27,7 +30,7 @@ app.add_middleware(
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
- )
+)
 
 # Включение роутеров
 app.include_router(auth.router)
@@ -41,3 +44,4 @@ def read_root():
 # from services import image_generator, shorts_generator
 # app.include_router(image_generator.router)
 # app.include_router(shorts_generator.router)
+

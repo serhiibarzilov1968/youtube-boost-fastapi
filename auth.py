@@ -9,16 +9,8 @@ router = APIRouter(
     tags=["users"]
 )
 
-# Dependency
-def get_db_session():
-    db = database.SessionLocal()
-    try:
-        yield db
-    finally:
-        db.close()
-
 @router.post("/register", response_model=schemas.User)
-def register_user(user: schemas.UserCreate, db: Session = Depends(get_db_session)):
+def register_user(user: schemas.UserCreate, db: Session = Depends(database.get_db)):
     db_user = db.query(models.User).filter(models.User.email == user.email).first()
     if db_user:
         raise HTTPException(status_code=400, detail="Email already registered")
@@ -32,7 +24,7 @@ def register_user(user: schemas.UserCreate, db: Session = Depends(get_db_session
     return new_user
 
 @router.post("/login")
-def login_user(user: schemas.UserCreate, db: Session = Depends(get_db_session)):
+def login_user(user: schemas.UserCreate, db: Session = Depends(database.get_db)):
     db_user = db.query(models.User).filter(models.User.email == user.email).first()
     
     # 1. Проверка существования пользователя
@@ -46,3 +38,4 @@ def login_user(user: schemas.UserCreate, db: Session = Depends(get_db_session)):
     # 3. Успешный вход - возвращаем токен (заглушку)
     # В реальном приложении здесь будет генерация JWT токена
     return {"message": "Login successful", "access_token": "fake_jwt_token_for_user_" + str(db_user.id), "token_type": "bearer"}
+
