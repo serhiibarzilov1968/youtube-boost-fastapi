@@ -18,8 +18,8 @@ origins = [
     "http://localhost",
     "http://localhost:8000",
     "http://127.0.0.1:8000",
-    "https://youtube-boost-fastapi-06e21a623f18.herokuapp.com", # Ваш Heroku URL
-    "*" # Разрешаем все источники для локального тестирования
+    "https://youtube-boost-fastapi-06e21a623f18.herokuapp.com", # Ваш Heroku URL бэкенда
+    "https://youtube-boost-frontend-2025-0a8da5262657.herokuapp.com" # <-- Ваш Heroku URL фронтенда
 ]
 
 app.add_middleware(
