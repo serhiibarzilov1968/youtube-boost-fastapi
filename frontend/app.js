@@ -1,152 +1,143 @@
-document.addEventListener('DOMContentLoaded', () => {
-    const registrationForm = document.getElementById('registrationForm');
-    const loginForm = document.getElementById('loginForm');
-    const messageDiv = document.getElementById('message');
+// API Base URL - измените это на URL вашего сервера
+const API_BASE_URL = 'http://localhost:8001';
 
-    // URL бэкенда, который мы используем (localhost для локального тестирования)
-    const API_BASE_URL = 'http://localhost:8001';
-
-    // --- Логика Регистрации ---
-    if (registrationForm ) {
-        registrationForm.addEventListener('submit', async (e) => {
+document.addEventListener('DOMContentLoaded', function() {
+    // Обработка формы регистрации
+    const registerForm = document.getElementById('registerForm');
+    if (registerForm) {
+        registerForm.addEventListener('submit', async function(e) {
             e.preventDefault();
-
             const email = document.getElementById('email').value;
             const password = document.getElementById('password').value;
-            const REGISTER_URL = `${API_BASE_URL}/api/v1/users/register`;
-
-            messageDiv.textContent = 'Регистрация...';
-            messageDiv.style.color = 'blue';
+            const messageDiv = document.getElementById('message');
 
             try {
-                const response = await fetch(REGISTER_URL, {
+                const response = await fetch(`${API_BASE_URL}/api/v1/users/register`, {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
                     },
-                    body: JSON.stringify({ email, password }),
+                    body: JSON.stringify({ email, password })
                 });
 
                 const data = await response.json();
 
                 if (response.ok) {
-                    messageDiv.textContent = 'Регистрация успешна! Перенаправление на страницу входа...';
-                    messageDiv.style.color = 'green';
-                    // Перенаправление на страницу входа после успешной регистрации
+                    messageDiv.innerHTML = `<p style="color: green;">Регистрация успешна! Перенаправление на страницу входа...</p>`;
                     setTimeout(() => {
                         window.location.href = 'login.html';
                     }, 2000);
                 } else {
-                    messageDiv.textContent = `Ошибка регистрации: ${data.detail || 'Неизвестная ошибка'}`;
-                    messageDiv.style.color = 'red';
+                    messageDiv.innerHTML = `<p style="color: red;">Ошибка: ${data.detail || 'Неизвестная ошибка'}</p>`;
                 }
             } catch (error) {
                 console.error('Сетевая ошибка при регистрации:', error);
-                messageDiv.textContent = 'Не удалось подключиться к серверу. Проверьте, запущен ли бэкенд на 8001 порту.';
-                messageDiv.style.color = 'red';
+                messageDiv.innerHTML = '<p style="color: red;">Не удалось подключиться к серверу. Проверьте, запущен ли бэкенд.</p>';
             }
         });
     }
 
-    // --- Логика Входа ---
+    // Обработка формы входа
+    const loginForm = document.getElementById('loginForm');
     if (loginForm) {
-        loginForm.addEventListener('submit', async (e) => {
+        loginForm.addEventListener('submit', async function(e) {
             e.preventDefault();
-
             const email = document.getElementById('email').value;
             const password = document.getElementById('password').value;
-            const LOGIN_URL = `${API_BASE_URL}/api/v1/users/login`;
-
-            messageDiv.textContent = 'Вход...';
-            messageDiv.style.color = 'blue';
+            const messageDiv = document.getElementById('message');
 
             try {
-                const response = await fetch(LOGIN_URL, {
+                const response = await fetch(`${API_BASE_URL}/api/v1/users/login`, {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
                     },
-                    body: JSON.stringify({ email, password }),
+                    body: JSON.stringify({ email, password })
                 });
 
                 const data = await response.json();
 
                 if (response.ok) {
-                    // Сохраняем токен и перенаправляем
+                    // Сохраняем токен в localStorage
                     localStorage.setItem('access_token', data.access_token);
-                    localStorage.setItem('token_type', data.token_type);
-                    messageDiv.textContent = 'Вход успешен! Перенаправление на панель управления...';
-                    messageDiv.style.color = 'green';
+                    messageDiv.innerHTML = `<p style="color: green;">Вход успешен! Перенаправление на панель управления...</p>`;
                     setTimeout(() => {
                         window.location.href = 'dashboard.html';
-                    }, 1500);
+                    }, 2000);
                 } else {
-                    messageDiv.textContent = `Ошибка входа: ${data.detail || 'Неизвестная ошибка'}`;
-                    messageDiv.style.color = 'red';
+                    messageDiv.innerHTML = `<p style="color: red;">Ошибка входа: ${data.detail || 'Неизвестная ошибка'}</p>`;
                 }
             } catch (error) {
                 console.error('Сетевая ошибка при входе:', error);
-                messageDiv.textContent = 'Не удалось подключиться к серверу. Проверьте, запущен ли бэкенд на 8001 порту.';
-                messageDiv.style.color = 'red';
+                messageDiv.innerHTML = '<p style="color: red;">Не удалось подключиться к серверу. Проверьте, запущен ли бэкенд.</p>';
             }
         });
     }
 
-    // --- Логика Проверки Аутентификации и Анализа на Dashboard ---
-    if (window.location.pathname.includes('dashboard.html')) {
-        const token = localStorage.getItem('access_token');
-        if (!token) {
-            // Если токена нет, перенаправляем на страницу входа
-            window.location.href = 'login.html';
-        }
-        // В реальном приложении здесь должна быть проверка токена на бэкенде
+    // Обработка формы анализа канала
+    const analyzeForm = document.getElementById('analyzeForm');
+    if (analyzeForm) {
+        analyzeForm.addEventListener('submit', async function(e) {
+            e.preventDefault();
+            const channelId = document.getElementById('channelId').value;
+            const analysisResultDiv = document.getElementById('analysisResult');
+            const analyzeButton = document.getElementById('analyzeButton');
 
-        // --- Логика Анализа Канала ---
-        const analyzeForm = document.getElementById('analyzeForm');
-        const analysisResultDiv = document.getElementById('analysisResult');
-        const analyzeButton = document.getElementById('analyzeButton');
+            analyzeButton.disabled = true;
+            analysisResultDiv.innerHTML = '<p>Загрузка...</p>';
 
-        if (analyzeForm) {
-            analyzeForm.addEventListener('submit', async (e) => {
-                e.preventDefault();
-                
-                const channelId = document.getElementById('channelId').value;
-                const ANALYZE_URL = `${API_BASE_URL}/api/v1/analyzer/analyze/${channelId}`;
-
-                analysisResultDiv.innerHTML = '<p style="color: blue;">Анализируем канал...</p>';
-                analyzeButton.disabled = true;
-
-                try {
-                    const response = await fetch(ANALYZE_URL, {
-                        method: 'GET',
-                        headers: {
-                            'Content-Type': 'application/json',
-                            // В реальном приложении здесь нужно передавать токен
-                            // 'Authorization': `Bearer ${token}` 
-                        },
-                    });
-
-                    const data = await response.json();
-
-                    if (response.ok) {
-                        analysisResultDiv.innerHTML = `
-                            <h3>Результат анализа: ${data.channel_title}</h3>
-                            <p><strong>ID Канала:</strong> ${data.channel_id}</p>
-                            <p><strong>Подписчики:</strong> ${data.subscriber_count.toLocaleString()}</p>
-                            <p><strong>Видео:</strong> ${data.video_count.toLocaleString()}</p>
-                            <p><strong>Просмотры:</strong> ${data.view_count.toLocaleString()}</p>
-                            <p style="color: green;">Статус: ${data.status}</p>
-                        `;
-                    } else {
-                        analysisResultDiv.innerHTML = `<p style="color: red;">Ошибка анализа: ${data.detail || 'Неизвестная ошибка'}</p>`;
+            try {
+                const response = await fetch(`${API_BASE_URL}/api/v1/analyzer/analyze/${channelId}`, {
+                    method: 'GET',
+                    headers: {
+                        'Content-Type': 'application/json',
                     }
-                } catch (error) {
-                    console.error('Сетевая ошибка при анализе:', error);
-                    analysisResultDiv.innerHTML = '<p style="color: red;">Не удалось подключиться к API. Проверьте, запущен ли бэкенд.</p>';
-                } finally {
-                    analyzeButton.disabled = false;
+                });
+
+                const data = await response.json();
+
+                if (response.ok) {
+                    analysisResultDiv.innerHTML = `
+                        <h3>Результаты анализа канала</h3>
+                        <p><strong>ID канала:</strong> ${data.channel_id}</p>
+                        <p><strong>Название:</strong> ${data.channel_title}</p>
+                        <p><strong>Подписчики:</strong> ${data.subscriber_count.toLocaleString()}</p>
+                        <p><strong>Видео:</strong> ${data.video_count}</p>
+                        <p><strong>Просмотры:</strong> ${data.view_count.toLocaleString()}</p>
+                        <p style="color: green;">Статус: ${data.status}</p>
+                    `;
+                } else {
+                    analysisResultDiv.innerHTML = `<p style="color: red;">Ошибка анализа: ${data.detail || 'Неизвестная ошибка'}</p>`;
                 }
-            });
-        }
+            } catch (error) {
+                console.error('Сетевая ошибка при анализе:', error);
+                analysisResultDiv.innerHTML = '<p style="color: red;">Не удалось подключиться к API. Проверьте, запущен ли бэкенд.</p>';
+            } finally {
+                analyzeButton.disabled = false;
+            }
+        });
     }
 });
+
+// Создание формы регистрации на главной странице
+if (document.body.innerHTML.includes('YouTubeBoost - Главная')) {
+    document.addEventListener('DOMContentLoaded', function() {
+        const container = document.querySelector('.container');
+        const registrationForm = document.createElement('div');
+        registrationForm.innerHTML = `
+            <h2>Регистрация</h2>
+            <form id="registerForm">
+                <label for="email">Email:</label>
+                <input type="email" id="email" required>
+
+                <label for="password">Пароль:</label>
+                <input type="password" id="password" required>
+
+                <button type="submit">Зарегистрироваться</button>
+            </form>
+            <div id="message"></div>
+        `;
+        container.appendChild(registrationForm);
+    });
+}
+
