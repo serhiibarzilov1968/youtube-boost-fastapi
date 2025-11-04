@@ -1,5 +1,5 @@
 // API Base URL - измените это на URL вашего сервера
-const API_BASE_URL = 'http://localhost:8001';
+const API_BASE_URL = 'https://youtube-boost-fastapi-06e21a623f18.herokuapp.com';
 
 document.addEventListener('DOMContentLoaded', function() {
     // Обработка формы регистрации
